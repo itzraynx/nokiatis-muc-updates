@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "channel": "stable",
+  "packageName": "com.nokiatis.muc",
+  "latestVersion": "1.5.0",
+  "latestVersionCode": 8,
+  "minSupportedVersionCode": 8,
+  "forceUpdate": true,
+  "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.5.0/NokiatisMUC-v1.5.0.apk",
+  "apkFileName": "NokiatisMUC-v1.5.0.apk",
+  "apkSize": 48895486,
+  "sha256": "0ced7ad11568129b6e4fb107a02d3ca44197edd3fd2dc0966bbfa111757ea935",
+  "signingCertificateSha256": "DDA7F001A4DC1DA3A7C39C0A45C81010C0E66AD0A4A952F815E79EE698C1EFC6",
+  "releasePageUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/tag/v1.5.0",
+  "releaseNotes": "New official Team Nokiatis update channel with verified in-app updates.\nFuture required releases install from inside Nokiatis MUC while keeping your library, playlists and downloads.\nIncludes all Nokiatis MUC 1.4.1 album, artist, downloads and performance improvements.",
+  "publishedAt": "2026-10-26T14:13:38Z"
+}
