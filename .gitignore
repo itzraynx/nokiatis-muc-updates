@@ -1,0 +1,23 @@
+# APKs are published as GitHub Release assets, never committed to Git.
+*.apk
+*.aab
+*.apks
+*.xapk
+
+# Signing material and credentials must never enter this public repository.
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+*token*
+*secret*
+*credential*
+
+# Local scratch files.
+.DS_Store
+*.log
+*.tmp
