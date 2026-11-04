@@ -2,6 +2,10 @@
 
 Official update feed and signed Android APK releases for **Nokiatis MUC** by **Team Nokiatis**.
 
+## 🌐 Official website
+
+**[itzraynx.github.io/nokiatis-muc-updates](https://itzraynx.github.io/nokiatis-muc-updates/)** — features, install guide, widgets, FAQ and the verified download (version, size and SHA-256 update automatically from the feed below).
+
 ## Download the latest official release
 
 ➡️ **[Latest Nokiatis MUC release](https://github.com/itzraynx/nokiatis-muc-updates/releases/latest)**
@@ -14,7 +18,8 @@ This public repository is only for:
 
 - the official `update.json` feed read by Nokiatis MUC;
 - signed official APK files attached to GitHub Releases;
-- release notes and update instructions.
+- release notes and update instructions;
+- the official website (`index.html`, served with GitHub Pages).
 
 The app's private source code is not stored here.
 
