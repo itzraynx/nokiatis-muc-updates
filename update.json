@@ -7,6 +7,7 @@
   "minSupportedVersionCode": 18,
   "forceUpdate": true,
   "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.13.0/NokiatisMUC-v1.13.0.apk",
+  "apkFileName": "NokiatisMUC-v1.13.0.apk",
   "apkSize": 48998345,
   "sha256": "aede24ae4493c144401008e8bef26268e75c9969d4852f34313a6be4bbe18be0",
   "signingCertificateSha256": "DDA7F001A4DC1DA3A7C39C0A45C81010C0E66AD0A4A952F815E79EE698C1EFC6",
