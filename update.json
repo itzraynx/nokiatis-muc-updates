@@ -1,14 +1,14 @@
 {
   "packageName": "com.nokiatis.muc",
-  "latestVersionCode": 20,
-  "latestVersionName": "1.14.0",
-  "minSupportedVersionCode": 20,
+  "latestVersionCode": 21,
+  "latestVersionName": "1.15.0",
+  "minSupportedVersionCode": 21,
   "forceUpdate": true,
-  "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.14.0/NokiatisMUC-v1.14.0.apk",
-  "apkFileName": "NokiatisMUC-v1.14.0.apk",
-  "apkSizeBytes": 49247785,
-  "apkSha256": "1ecb750353052630c226e01b0cdb20a0fc013222ee2ef020945cc9d286d88567",
-  "releaseNotes": "Nokiatis MUC 1.14.0 — your headphones now run the show.\n\n• Music pauses the moment your Bluetooth earbuds go back in the case, or a cable is unplugged — no more blasting the phone speaker in public.\n• Connecting Bluetooth mid-song no longer freezes playback: the app re-attaches to the new output and continues from the same second by itself.\n• New Settings → Playback switch: Pause when headphones disconnect (on by default).\n• Update checks now see a new release within minutes instead of half an hour.\n• Website fixed: it now always shows the real newest version.",
+  "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.15.0/NokiatisMUC-v1.15.0.apk",
+  "apkFileName": "NokiatisMUC-v1.15.0.apk",
+  "apkSizeBytes": 49382697,
+  "apkSha256": "bbfe7f2580ee92ebed7ee94f89a441fe35ba8ae2662b3f96673d3e4cb12696d0",
+  "releaseNotes": "Nokiatis MUC 1.15.0 — everything from the gap report, actually working.\n\n• Lyrics search: hum a line you remember and the song comes up.\n• Real voice search — tap the mic and speak; your words land in the search box.\n• Equalizer, Bass Boost and Loudness now change the sound on the actual player (7 presets, or tune each band yourself).\n• Download quality, Wi-Fi-only downloads (they wait, then start by themselves) and a real storage limit.\n• Offline mixtape: the app keeps a ready-to-play mix of your music on the phone.\n• Playlists: pick a cover from the songs inside, search inside a playlist, and select several songs to download, queue or remove at once.\n• Share a song from the exact second you are listening at, or share a designed image card.\n• New today: Daylist (what you play at this time of day), Release Radar (new songs from artists you follow), Moments (saved seconds that jump straight back), and a Station builder — pick artists, set the variety.\n• A real notification centre behind the Home bell: new releases, finished downloads, mixtape refreshes and waiting updates.\n• Lyrics can show a translation or Latin-script reading when the lyrics catalogue provides one.\n• A–B repeat, pinned playlists and playlist folders, and a shareable listening recap.",
   "publishedAt": "2026-11-05",
   "signingCertificateSha256": "DDA7F001A4DC1DA3A7C39C0A45C81010C0E66AD0A4A952F815E79EE698C1EFC6"
 }
