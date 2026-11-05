@@ -1,14 +1,14 @@
 {
   "packageName": "com.nokiatis.muc",
-  "latestVersionCode": 19,
-  "latestVersionName": "1.13.1",
-  "minSupportedVersionCode": 19,
+  "latestVersionCode": 20,
+  "latestVersionName": "1.14.0",
+  "minSupportedVersionCode": 20,
   "forceUpdate": true,
-  "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.13.1/NokiatisMUC-v1.13.1.apk",
-  "apkFileName": "NokiatisMUC-v1.13.1.apk",
-  "apkSizeBytes": 49242613,
-  "apkSha256": "fa27a79065e2be81b45ec0017fe1ebeac8432ba9cabbb3e5cbdd948c6415e3a0",
-  "releaseNotes": "Nokiatis MUC 1.13.1 — Arabic fixes and the official icon.\n\n• Fixed the seek bar and volume slider moving opposite to your finger in Arabic — media sliders now drag naturally, exactly like in English, and mini-player progress matches.\n• Back arrows point the right way in Arabic.\n• The official Team Nokiatis liquid-glass icon is now the app icon.\n• New installs start on the Classic look with Round corners.\n• Glass backgrounds now blend with your chosen theme color.",
-  "publishedAt": "2026-11-04",
+  "apkUrl": "https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.14.0/NokiatisMUC-v1.14.0.apk",
+  "apkFileName": "NokiatisMUC-v1.14.0.apk",
+  "apkSizeBytes": 49247785,
+  "apkSha256": "1ecb750353052630c226e01b0cdb20a0fc013222ee2ef020945cc9d286d88567",
+  "releaseNotes": "Nokiatis MUC 1.14.0 — your headphones now run the show.\n\n• Music pauses the moment your Bluetooth earbuds go back in the case, or a cable is unplugged — no more blasting the phone speaker in public.\n• Connecting Bluetooth mid-song no longer freezes playback: the app re-attaches to the new output and continues from the same second by itself.\n• New Settings → Playback switch: Pause when headphones disconnect (on by default).\n• Update checks now see a new release within minutes instead of half an hour.\n• Website fixed: it now always shows the real newest version.",
+  "publishedAt": "2026-11-05",
   "signingCertificateSha256": "DDA7F001A4DC1DA3A7C39C0A45C81010C0E66AD0A4A952F815E79EE698C1EFC6"
 }
