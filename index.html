@@ -145,6 +145,16 @@
   .stat-meta{display:flex;align-items:center;gap:14px;margin-top:18px;color:var(--faint);font-size:13px;flex-wrap:wrap}
   .stat-meta .err{color:#F87171}
   @media(max-width:900px){.stat-cards{grid-template-columns:1fr}}
+  /* ---- owner password gate (Ctrl+9) ---- */
+  .pw-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px}
+  .pw-backdrop[hidden]{display:none}
+  .pw-modal{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--edge);border-radius:var(--radius);padding:26px;width:min(92vw,380px);box-shadow:0 24px 80px rgba(0,0,0,.55)}
+  .pw-modal h3{font-size:17px;font-weight:800;margin-bottom:6px}
+  .pw-sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+  .pw-modal input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--edge);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-weight:700;outline:none;direction:ltr}
+  .pw-modal input:focus{border-color:rgba(34,197,94,.5)}
+  .pw-err{color:#F87171;font-size:12.5px;font-weight:700;margin-top:8px}
+  .pw-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
   .faq{margin-top:24px;display:grid;gap:12px}
   details{background:var(--surface);border:1px solid var(--edge);border-radius:18px;padding:18px 22px}
   summary{cursor:pointer;font-weight:800;font-size:15.5px;list-style:none;min-height:28px}
@@ -221,7 +231,7 @@
     <div class="nav-links">
       <a href="#features" data-i="n1">Features</a><a href="#screens" data-i="n2">Screenshots</a>
       <a href="#download" data-i="n3">Download</a><a href="#safety" data-i="n4">Safety</a>
-      <a href="#install" data-i="n5">Install</a><a href="#stats" data-i="n8">Live stats</a>
+      <a href="#install" data-i="n5">Install</a>
       <a href="#faq" data-i="n6">FAQ</a>
     </div>
     <button class="lang-btn" id="langBtn" type="button">العربية</button>
@@ -374,7 +384,7 @@
     </div>
   </section>
 
-  <section id="stats">
+  <section id="stats" hidden>
     <div class="eyebrow" data-i="st0">Live statistics</div>
     <h2 data-i="st1">Real users, right now</h2>
     <p class="sub" data-i="st2">100% real numbers, reported anonymously by the app itself: a random per-install id, the app version and timestamps — nothing else, ever. Versions before 1.18.2 don't report.</p>
@@ -462,6 +472,18 @@
   <a class="btn small dl-btn" id="stickyDownload" href="https://github.com/itzraynx/nokiatis-muc-updates/releases/download/v1.18.2/NokiatisMUC-v1.18.2.apk"><span data-i="sb2">⬇ Install</span></a>
   <button class="x" id="stickyClose" type="button" aria-label="Close">✕</button>
 </div>
+<div class="pw-backdrop" id="pwBackdrop" hidden>
+  <div class="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <h3 id="pwTitle" data-i="pw0">Owner area</h3>
+    <p class="pw-sub" data-i="pw1">Enter the password to open the live statistics.</p>
+    <input type="password" id="pwInput" autocomplete="off" inputmode="text" aria-label="Password">
+    <p class="pw-err" id="pwErr" hidden data-i="pw2">Wrong password.</p>
+    <div class="pw-actions">
+      <button class="btn ghost small" id="pwCancel" type="button" data-i="pw3">Cancel</button>
+      <button class="btn small dl-btn" id="pwOk" type="button" data-i="pw4">Open</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -537,10 +559,10 @@ ar:{
  b0:"نسخة تجريبية",b1:"صار التطبيق يسأل، مرة واحدة عند أول فتح: سجّل الدخول إلى سحابة Nokiatis لحفظ بياناتك بين هواتفك — أو أكمل كزائر وأنت تعرف الثمن: بيانات الزائر تبقى على هذا الهاتف فقط وتضيع إذا حذفت التطبيق أو مسحت بياناته. سجّل الدخول بدلًا من ذلك وكل شيء — القوائم والإعجابات والتنزيلات والسجل — يتزامن تلقائيًا من تلك اللحظة. روابط مشاركة الأغاني والقوائم تسافر الآن بالعربية كاملة. النسخ التجريبية لا تُقفل التطبيق أبدًا ويمكن تخطّيها دائمًا.",b2:"⬇ جرّب النسخة التجريبية (1.17.0-beta.1)",b3:"ملاحظات الإصدار ←",
  ft1:"أكادير، المغرب",ft2:"تنزيل",ft3:"الأمان",ft4:"الإصدارات",ft5:"تقارير الأعطال",ft6:"تراخيص مفتوحة المصدر",
  ft7:"Nokiatis MUC مشغّل موسيقى مستقل من فريق Nokiatis، ولا علاقة له بـ YouTube أو Google أو Spotify. كل الموسيقى والأغلفة والكلمات ملك لأصحابها؛ من فضلك نزّل فقط المحتوى الذي يحق لك حفظه.",
- n8:"إحصائيات حية",
  st0:"إحصائيات حية",st1:"مستخدمون حقيقيون، الآن",st2:"أرقام حقيقية 100%، يبلّغ عنها التطبيق نفسه بشكل مجهول: معرّف عشوائي لهذا التثبيت وإصدار التطبيق وأوقات فقط — لا شيء غير ذلك أبدًا. الإصدارات الأقدم من 1.18.2 لا تُبلّغ.",
  st3:"نشِط في آخر 15 دقيقة",st4:"غير متصل",st5:"كل المستخدمين",st6:"↻ تحديث",
  p7:"البحث في الكتالوج والبث والأغلفة والكلمات، وفحص التحديثات الرسمية على GitHub. وإذا شغّلت سحابة Nokiatis Cloud: مزامنة المكتبة إلى حسابك وحدك. تقارير الأعطال تُكتب على الجهاز ولا تُشارك إلا إذا ضغطت «إرسال». ونبضة الإحصائيات المجهولة الاختيارية (الإعدادات ← مشاركة إحصائيات الاستخدام) ترسل فقط معرّفًا عشوائيًا لهذا التثبيت وإصدار التطبيق وأوقاتًا — لا مكتبتك ولا سجلّك ولا أي بيانات شخصية إطلاقًا — وهي التي تُغذّي عدّادات المستخدمين الحية في هذه الصفحة.",
+ pw0:"منطقة المالك",pw1:"أدخل كلمة السر لفتح الإحصائيات الحية.",pw2:"كلمة السر غير صحيحة.",pw3:"إلغاء",pw4:"فتح",
  sb1:"أحدث إصدار",sb2:"⬇ ثبّت"
 }
 };
@@ -779,6 +801,7 @@ function loadFeed(attempt){
 }
 /* ---- live statistics (v1.18.2): the same document the app writes ---- */
 var STATS_URL = 'https://textdb.dev/api/data/nokiatis-muc-live-stats-v1';
+var OWNER_PASSWORD = '1899nokiatis';
 var ACTIVE_WINDOW_MS = 15 * 60 * 1000;
 var statsDoc = null, statsLoadFailed = false;
 function statsS(){
@@ -847,12 +870,55 @@ function loadStats(){
       statsLoadFailed = true; renderStats();
     });
 }
+var statsStarted = false;
+function startStats(){
+  if(statsStarted) return;
+  statsStarted = true;
+  loadStats();
+  setInterval(loadStats, 60000);
+}
 (function(){
   var btn = document.getElementById('statRefresh');
   if(btn) btn.addEventListener('click', function(){ statsLoadFailed = false; loadStats(); });
-  loadStats();
-  setInterval(loadStats, 60000);
   window.renderStats = renderStats;
+})();
+/* ---- owner gate: Ctrl+9 opens the password dialog; the live statistics
+   stay invisible to normal visitors and the numbers are not even fetched
+   until the gate opens. ---- */
+document.addEventListener('keydown', function(e){
+  if(!e.ctrlKey || e.altKey || e.metaKey) return;
+  if(e.key !== '9' && e.code !== 'Digit9' && e.code !== 'Numpad9') return;
+  e.preventDefault();
+  var backdrop = document.getElementById('pwBackdrop');
+  if(!backdrop) return;
+  backdrop.hidden = false;
+  var inp = document.getElementById('pwInput');
+  inp.value = '';
+  document.getElementById('pwErr').hidden = true;
+  setTimeout(function(){ inp.focus(); }, 30);
+});
+function tryUnlock(){
+  var inp = document.getElementById('pwInput');
+  if(String(inp.value).trim() === OWNER_PASSWORD){
+    document.getElementById('pwBackdrop').hidden = true;
+    var sec = document.getElementById('stats');
+    sec.hidden = false;
+    startStats();
+    sec.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    document.getElementById('pwErr').hidden = false;
+    inp.select();
+  }
+}
+(function(){
+  var backdrop = document.getElementById('pwBackdrop');
+  var ok = document.getElementById('pwOk');
+  var cancel = document.getElementById('pwCancel');
+  var inp = document.getElementById('pwInput');
+  if(ok) ok.addEventListener('click', tryUnlock);
+  if(cancel) cancel.addEventListener('click', function(){ backdrop.hidden = true; });
+  if(inp) inp.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryUnlock(); });
+  if(backdrop) backdrop.addEventListener('click', function(e){ if(e.target === backdrop) backdrop.hidden = true; });
 })();
 loadFeed(0);
 </script>
