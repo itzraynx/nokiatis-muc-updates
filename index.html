@@ -144,6 +144,14 @@
   .stat-v b{color:var(--text)}
   .stat-meta{display:flex;align-items:center;gap:14px;margin-top:18px;color:var(--faint);font-size:13px;flex-wrap:wrap}
   .stat-meta .err{color:#F87171}
+  .stat-card .note{display:block;color:var(--faint);font-size:11.5px;font-weight:700;margin-top:6px}
+  .stat-chart{display:flex;align-items:flex-end;gap:3px;direction:ltr;height:96px;margin-top:28px;background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--edge);border-radius:var(--radius);padding:10px 10px 8px}
+  .stat-chart i{flex:1;background:rgba(34,197,94,.55);border-radius:6px 6px 2px 2px;min-height:2px;transition:height .3s ease}
+  .stat-chart i.now{background:rgba(134,239,172,.9)}
+  .stat-chart.empty{align-items:center;justify-content:center}
+  .stat-empty{color:var(--faint);font-size:12.5px;font-weight:700}
+  .stat-chart-x{display:flex;justify-content:space-between;direction:ltr;color:var(--faint);font-size:10.5px;font-weight:800;letter-spacing:1px;margin-top:6px;padding:0 2px}
+  .stat-chart-cap{color:var(--muted);font-size:12px;font-weight:700;margin-top:10px}
   @media(max-width:900px){.stat-cards{grid-template-columns:1fr}}
   /* ---- owner password gate (Ctrl+9) ---- */
   .pw-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -387,13 +395,19 @@
   <section id="stats" hidden>
     <div class="eyebrow" data-i="st0">Live statistics</div>
     <h2 data-i="st1">Real users, right now</h2>
-    <p class="sub" data-i="st2">100% real numbers, reported anonymously by the app itself: a random per-install id, the app version and timestamps — nothing else, ever. Versions before 1.18.2 don't report.</p>
+    <p class="sub" data-i="st2">100% real numbers, reported anonymously by the app itself: a random per-install id, the app version, the platform, timestamps and anonymous per-day counters (installs, starts, hourly heartbeat totals) — nothing else, ever. Versions before 1.18.2 don't report.</p>
     <div class="stat-cards">
       <div class="stat-card"><span class="dot"></span><b id="statActive">—</b><span class="lbl" data-i="st3">Active in the last 15 minutes</span></div>
       <div class="stat-card"><b id="statOffline">—</b><span class="lbl" data-i="st4">Offline</span></div>
       <div class="stat-card"><b id="statAll">—</b><span class="lbl" data-i="st5">All users</span></div>
+      <div class="stat-card"><b id="statNewToday">—</b><span class="lbl" data-i="st7">New today</span></div>
+      <div class="stat-card"><b id="statSessions">—</b><span class="lbl" data-i="st8">Sessions today</span></div>
+      <div class="stat-card"><b id="statLatest">—</b><span class="lbl" data-i="st9">On latest version</span><span class="note" id="statLatestNote"></span></div>
     </div>
     <div class="stat-versions" id="statVersions"></div>
+    <div class="stat-chart" id="statChart" role="img" aria-label=""></div>
+    <div class="stat-chart-x"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
+    <div class="stat-chart-cap" data-i="st10">Last 24 hours (UTC)</div>
     <div class="stat-meta">
       <span id="statUpdated">…</span>
       <button class="btn ghost small" id="statRefresh" type="button" data-i="st6">↻ Refresh</button>
@@ -416,7 +430,7 @@
     <div class="grid">
       <div class="card"><h3 data-i="p2">No account needed</h3><p data-i="p3">Everything works signed out — no sign-up, no login, no server profile. The name you enter in Get Started never leaves your phone. If you opt into Nokiatis Cloud, only your library row is stored, protected by row-level security so only your signed-in account can read it.</p></div>
       <div class="card"><h3 data-i="p4">On-device data</h3><p data-i="p5">Your library, playlists, downloads, history and the taste engine's learning live on the device. Export a backup any time from Settings.</p></div>
-      <div class="card"><h3 data-i="p6">What uses the network</h3><p data-i="p7">Catalogue search, streaming, artwork and lyrics, and the official GitHub update check. If you turn on Nokiatis Cloud, library sync to your own account. Crash reports are written on-device and shared only if you tap Send. The optional anonymous usage heartbeat (Settings → Share anonymous usage statistics) sends only a random per-install id, the app version and timestamps — never your library, history or any personal data — and it feeds the live user counters on this page.</p></div>
+      <div class="card"><h3 data-i="p6">What uses the network</h3><p data-i="p7">Catalogue search, streaming, artwork and lyrics, and the official GitHub update check. If you turn on Nokiatis Cloud, library sync to your own account. Crash reports are written on-device and shared only if you tap Send. The optional anonymous usage heartbeat (Settings → Share anonymous usage statistics) sends only a random per-install id, the app version, the platform, timestamps and anonymous per-day counters (installs, starts, hourly heartbeat totals) — never your library, history or any personal data — and it feeds the live user counters on this page.</p></div>
     </div>
   </section>
 
@@ -559,9 +573,10 @@ ar:{
  b0:"نسخة تجريبية",b1:"صار التطبيق يسأل، مرة واحدة عند أول فتح: سجّل الدخول إلى سحابة Nokiatis لحفظ بياناتك بين هواتفك — أو أكمل كزائر وأنت تعرف الثمن: بيانات الزائر تبقى على هذا الهاتف فقط وتضيع إذا حذفت التطبيق أو مسحت بياناته. سجّل الدخول بدلًا من ذلك وكل شيء — القوائم والإعجابات والتنزيلات والسجل — يتزامن تلقائيًا من تلك اللحظة. روابط مشاركة الأغاني والقوائم تسافر الآن بالعربية كاملة. النسخ التجريبية لا تُقفل التطبيق أبدًا ويمكن تخطّيها دائمًا.",b2:"⬇ جرّب النسخة التجريبية (1.17.0-beta.1)",b3:"ملاحظات الإصدار ←",
  ft1:"أكادير، المغرب",ft2:"تنزيل",ft3:"الأمان",ft4:"الإصدارات",ft5:"تقارير الأعطال",ft6:"تراخيص مفتوحة المصدر",
  ft7:"Nokiatis MUC مشغّل موسيقى مستقل من فريق Nokiatis، ولا علاقة له بـ YouTube أو Google أو Spotify. كل الموسيقى والأغلفة والكلمات ملك لأصحابها؛ من فضلك نزّل فقط المحتوى الذي يحق لك حفظه.",
- st0:"إحصائيات حية",st1:"مستخدمون حقيقيون، الآن",st2:"أرقام حقيقية 100%، يبلّغ عنها التطبيق نفسه بشكل مجهول: معرّف عشوائي لهذا التثبيت وإصدار التطبيق وأوقات فقط — لا شيء غير ذلك أبدًا. الإصدارات الأقدم من 1.18.2 لا تُبلّغ.",
+ st0:"إحصائيات حية",st1:"مستخدمون حقيقيون، الآن",st2:"أرقام حقيقية 100%، يبلّغ عنها التطبيق نفسه بشكل مجهول: معرّف عشوائي لهذا التثبيت وإصدار التطبيق والمنصة والأوقات وعدّادات يومية مجهولة (تثبيتات ومرات تشغيل ومجموع النبضات لكل ساعة) — لا شيء غير ذلك أبدًا. الإصدارات الأقدم من 1.18.2 لا تُبلّغ.",
  st3:"نشِط في آخر 15 دقيقة",st4:"غير متصل",st5:"كل المستخدمين",st6:"↻ تحديث",
- p7:"البحث في الكتالوج والبث والأغلفة والكلمات، وفحص التحديثات الرسمية على GitHub. وإذا شغّلت سحابة Nokiatis Cloud: مزامنة المكتبة إلى حسابك وحدك. تقارير الأعطال تُكتب على الجهاز ولا تُشارك إلا إذا ضغطت «إرسال». ونبضة الإحصائيات المجهولة الاختيارية (الإعدادات ← مشاركة إحصائيات الاستخدام) ترسل فقط معرّفًا عشوائيًا لهذا التثبيت وإصدار التطبيق وأوقاتًا — لا مكتبتك ولا سجلّك ولا أي بيانات شخصية إطلاقًا — وهي التي تُغذّي عدّادات المستخدمين الحية في هذه الصفحة.",
+ st7:"جديدة اليوم",st8:"جلسات اليوم",st9:"على أحدث إصدار",st10:"آخر 24 ساعة (UTC)",
+ p7:"البحث في الكتالوج والبث والأغلفة والكلمات، وفحص التحديثات الرسمية على GitHub. وإذا شغّلت سحابة Nokiatis Cloud: مزامنة المكتبة إلى حسابك وحدك. تقارير الأعطال تُكتب على الجهاز ولا تُشارك إلا إذا ضغطت «إرسال». ونبضة الإحصائيات المجهولة الاختيارية (الإعدادات ← مشاركة إحصائيات الاستخدام) ترسل فقط معرّفًا عشوائيًا لهذا التثبيت وإصدار التطبيق والمنصة والأوقات وعدّادات يومية مجهولة (تثبيتات ومرات تشغيل ومجموع نبضات كل ساعة) — لا مكتبتك ولا سجلّك ولا أي بيانات شخصية إطلاقًا — وهي التي تُغذّي عدّادات المستخدمين الحية في هذه الصفحة.",
  pw0:"منطقة المالك",pw1:"أدخل كلمة السر لفتح الإحصائيات الحية.",pw2:"كلمة السر غير صحيحة.",pw3:"إلغاء",pw4:"فتح",
  sb1:"أحدث إصدار",sb2:"⬇ ثبّت"
 }
@@ -806,8 +821,8 @@ var ACTIVE_WINDOW_MS = 15 * 60 * 1000;
 var statsDoc = null, statsLoadFailed = false;
 function statsS(){
   return curLang === 'ar'
-    ? {now:'الآن', minAgo:function(n){return 'قبل ' + n + ' د';}, hourAgo:function(n){return 'قبل ' + n + ' س';}, dayAgo:function(n){return 'قبل ' + n + ' يوم';}, lastBeat:'آخر نبضة', failed:'تعذّر جلب الإحصائيات الآن — سنعيد المحاولة تلقائيًا.', more:function(n){return '+' + n + ' إصدارات أخرى';}}
-    : {now:'just now', minAgo:function(n){return n + 'm ago';}, hourAgo:function(n){return n + 'h ago';}, dayAgo:function(n){return n + 'd ago';}, lastBeat:'Last heartbeat', failed:'Could not load the statistics — retrying automatically.', more:function(n){return '+' + n + ' more versions';}};
+    ? {now:'الآن', minAgo:function(n){return 'قبل ' + n + ' د';}, hourAgo:function(n){return 'قبل ' + n + ' س';}, dayAgo:function(n){return 'قبل ' + n + ' يوم';}, lastBeat:'آخر نبضة', failed:'تعذّر جلب الإحصائيات الآن — سنعيد المحاولة تلقائيًا.', more:function(n){return '+' + n + ' إصدارات أخرى';}, latest:function(v){return 'الأحدث: ' + v;}, emptyChart:'لا نبضات في آخر 24 ساعة.', chartAria:function(n,h){return 'توزيع نبضات آخر 24 ساعة، الذروة ' + n + ' عند ' + ((h < 10) ? '0' : '') + h + ':00 بالتوقيت العالمي (UTC).';}}
+    : {now:'just now', minAgo:function(n){return n + 'm ago';}, hourAgo:function(n){return n + 'h ago';}, dayAgo:function(n){return n + 'd ago';}, lastBeat:'Last heartbeat', failed:'Could not load the statistics — retrying automatically.', more:function(n){return '+' + n + ' more versions';}, latest:function(v){return 'latest: ' + v;}, emptyChart:'No heartbeats in the last 24 hours.', chartAria:function(n,h){return '24-hour heartbeat distribution, peak ' + n + ' at ' + ((h < 10) ? '0' : '') + h + ':00 UTC.';}};
 }
 function statsRelAgo(ts){
   var d = Date.now() - ts;
@@ -817,6 +832,59 @@ function statsRelAgo(ts){
   return statsS().dayAgo(Math.floor(d / 86400000));
 }
 function esc(s){ return String(s).replace(/[^\w.+-]/g, ''); }
+function utcDayKey(ms){
+  var d = new Date(ms);
+  return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '-' + ('0' + d.getUTCDate()).slice(-2);
+}
+function verTuple(v){
+  var m = String(v || '').match(/^(\d+)\.(\d+)(?:\.(\d+))?/);
+  return m ? [parseInt(m[1], 10), parseInt(m[2], 10), m[3] ? parseInt(m[3], 10) : 0] : null;
+}
+function verCmp(a, b){
+  for(var i = 0; i < 3; i++){ var d = (a[i] || 0) - (b[i] || 0); if(d) return d; }
+  return 0;
+}
+function statChartBars(buckets, hourNow){
+  var chart = document.getElementById('statChart');
+  if(!chart) return;
+  var s = statsS(), bk, max = 0, peak = 0;
+  for(bk = 0; bk < 24; bk++){ if((buckets[bk] || 0) > max){ max = buckets[bk] || 0; peak = bk; } }
+  if(!max){
+    // quiet day (v1 doc with nothing seen, or a fresh v2 day): empty state
+    chart.classList.add('empty');
+    chart.innerHTML = '';
+    var em = document.createElement('span');
+    em.className = 'stat-empty';
+    em.textContent = s.emptyChart;
+    chart.appendChild(em);
+    chart.setAttribute('aria-label', s.emptyChart);
+    return;
+  }
+  chart.classList.remove('empty');
+  var bars = chart.getElementsByTagName('i');
+  if(bars.length !== 24){
+    // built once; afterwards the same 24 bars are updated in place (no rebuild flicker)
+    chart.innerHTML = '';
+    for(bk = 0; bk < 24; bk++) chart.appendChild(document.createElement('i'));
+    bars = chart.getElementsByTagName('i');
+  }
+  chart.setAttribute('aria-label', s.chartAria(max, (hourNow + 1 + peak) % 24));
+  for(bk = 0; bk < 24; bk++){
+    var c = buckets[bk] || 0;
+    var h = (hourNow + 1 + bk) % 24;
+    var bar = bars[bk];
+    bar.style.height = (c === 0 ? 2 : Math.max(4, Math.round(c * 100 / max))) + '%';
+    bar.className = (bk === 23) ? 'now' : '';
+    bar.title = ((h < 10) ? '0' : '') + h + ':00 UTC — ' + c;
+  }
+}
+function statChartClear(){
+  var chart = document.getElementById('statChart');
+  if(!chart) return;
+  chart.classList.remove('empty');
+  chart.innerHTML = '';
+  chart.removeAttribute('aria-label');
+}
 function renderStats(){
   var act = document.getElementById('statActive');
   if(!act) return;
@@ -825,9 +893,18 @@ function renderStats(){
   var off = document.getElementById('statOffline');
   var all = document.getElementById('statAll');
   var vs = document.getElementById('statVersions');
+  var nt = document.getElementById('statNewToday');
+  var se = document.getElementById('statSessions');
+  var lv = document.getElementById('statLatest');
+  var lvn = document.getElementById('statLatestNote');
   if(statsLoadFailed){
     act.textContent = '—'; off.textContent = '—'; all.textContent = '—';
+    if(nt) nt.textContent = '—';
+    if(se) se.textContent = '—';
+    if(lv) lv.textContent = '—';
+    if(lvn) lvn.textContent = '';
     if(vs) vs.innerHTML = '';
+    statChartClear();
     if(upd){ upd.textContent = s.failed; upd.classList.add('err'); }
     return;
   }
@@ -847,6 +924,72 @@ function renderStats(){
   act.textContent = String(active);
   off.textContent = String(ids.length - active);
   all.textContent = String(ids.length);
+  /* ---- schema v2 daily counters; v1 docs fall back or show '—' ---- */
+  var daily = (statsDoc.daily && typeof statsDoc.daily === 'object') ? statsDoc.daily : null;
+  var hourNow = new Date(now).getUTCHours();
+  var today = daily ? (daily[utcDayKey(now)] || null) : null;
+  var yst = daily ? (daily[utcDayKey(now - 86400000)] || null) : null;
+  if(nt){
+    var newToday = null;
+    if(today && typeof today.n === 'number') newToday = today.n;
+    else if(daily) newToday = 0;
+    else if(statsDoc.schema === 1){
+      // v1 fallback: installs are still derivable from first-heartbeat times
+      var dayStart = now - (now % 86400000), fresh = 0;
+      ids.forEach(function(id){
+        var f = (devices[id] || {}).first || 0;
+        if(f >= dayStart) fresh++;
+      });
+      newToday = fresh > 0 ? fresh : null; // a zero from v1 means "not reported", not "none"
+    }
+    nt.textContent = newToday === null ? '—' : String(newToday);
+  }
+  if(se){
+    var startsToday = null;
+    if(daily) startsToday = (today && typeof today.s === 'number') ? today.s : 0;
+    se.textContent = startsToday === null ? '—' : String(startsToday);
+  }
+  if(lv){
+    // newest = numerically parsed, so 1.10 properly beats 1.9
+    var maxT = null, maxRaw = '', onMax = 0;
+    ids.forEach(function(id){
+      var raw = devices[id] ? String(devices[id].version || '') : '';
+      var t = verTuple(raw);
+      if(t && (!maxT || verCmp(t, maxT) > 0)){ maxT = t; maxRaw = raw; }
+    });
+    if(maxT){
+      ids.forEach(function(id){
+        var t = devices[id] ? verTuple(devices[id].version) : null;
+        if(t && verCmp(t, maxT) === 0) onMax++;
+      });
+      lv.textContent = ids.length ? Math.round(onMax * 100 / ids.length) + '%' : '—';
+      if(lvn) lvn.textContent = s.latest(esc(maxRaw));
+    } else {
+      lv.textContent = '—';
+      if(lvn) lvn.textContent = '';
+    }
+  }
+  var buckets = [];
+  if(daily){
+    // last 24 UTC hours = yesterday h[hour+1..23] then today h[0..hour]
+    for(var bk = 0; bk < 24; bk++){
+      var hh = (hourNow + 1 + bk) % 24;
+      var dd = (hh > hourNow) ? yst : today;
+      var ha = (dd && dd.h) ? dd.h : null;
+      buckets.push((ha && typeof ha[hh] === 'number') ? ha[hh] : 0);
+    }
+  } else {
+    for(var bz = 0; bz < 24; bz++) buckets.push(0);
+    // v1 fallback: one tick per device, in its last-seen UTC hour
+    var slotStart = (now - (now % 3600000)) - 23 * 3600000;
+    ids.forEach(function(id){
+      var last = (devices[id] || {}).last || 0;
+      if(!last || last > now || last < slotStart) return;
+      var idx = Math.floor((last - slotStart) / 3600000);
+      if(idx >= 0 && idx < 24) buckets[idx] += 1;
+    });
+  }
+  statChartBars(buckets, hourNow);
   if(vs){
     var keys = Object.keys(versions).sort(function(a,b){ return versions[b] - versions[a]; });
     var shown = keys.slice(0, 6), extra = keys.length - shown.length;
@@ -861,7 +1004,7 @@ function loadStats(){
     .then(function(r){ if(!r.ok) throw new Error('stats ' + r.status); return r.json(); })
     .then(function(doc){
       if(typeof doc === 'string'){ try { doc = JSON.parse(doc); } catch(e){ doc = null; } }
-      if(!doc || doc.schema !== 1) throw new Error('bad stats');
+      if(!doc || (doc.schema !== 1 && doc.schema !== 2)) throw new Error('bad stats');
       statsDoc = doc; statsLoadFailed = false; renderStats();
     })
     .catch(function(){
@@ -870,12 +1013,21 @@ function loadStats(){
       statsLoadFailed = true; renderStats();
     });
 }
-var statsStarted = false;
+var statsStarted = false, statsTimer = null;
 function startStats(){
   if(statsStarted) return;
   statsStarted = true;
   loadStats();
-  setInterval(loadStats, 60000);
+  statsTimer = setInterval(loadStats, 60000);
+  // poll hygiene: no background traffic while the tab is hidden
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      if(statsTimer){ clearInterval(statsTimer); statsTimer = null; }
+    } else if(!statsTimer){
+      statsTimer = setInterval(loadStats, 60000);
+      loadStats(); // catch up right away on return
+    }
+  });
 }
 (function(){
   var btn = document.getElementById('statRefresh');
