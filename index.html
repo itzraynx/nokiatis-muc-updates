@@ -291,6 +291,28 @@
   .pw-modal input:focus{border-color:rgba(34,197,94,.5)}
   .pw-err{color:#F87171;font-size:12.5px;font-weight:700;margin-top:8px}
   .pw-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+  /* ---- account recovery (password reset, server-side fix) ---- */
+  .rp-backdrop{z-index:130}
+  .rp-view{animation:rp-in .22s ease}
+  .rp-view[hidden]{display:none}
+  @keyframes rp-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .rp-lab{display:block;color:var(--muted);font-size:12.5px;font-weight:800;letter-spacing:.4px;margin:14px 0 7px}
+  .rp-field{position:relative}
+  .rp-field input{padding-inline-end:44px}
+  .rp-eye{position:absolute;inset-inline-end:9px;top:9px;background:none;border:0;color:var(--faint);cursor:pointer;padding:6px;display:flex;border-radius:9px}
+  .rp-eye:hover{color:var(--text)}
+  .rp-note{color:var(--faint);font-size:12px;font-weight:700;margin-top:10px;line-height:1.8}
+  .rp-strong{color:var(--text);font-size:14.5px;font-weight:800;line-height:1.8;margin:2px 0 4px}
+  .rp-ltr{direction:ltr}
+  .rp-tag{direction:ltr;text-align:left;background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.3);color:#86EFAC;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:800;margin-top:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rp-big{width:52px;height:52px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ADE80}
+  .rp-big svg{width:26px;height:26px}
+  .rp-big.warn{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.35);color:#F87171}
+  .rp-mail{width:46px;height:46px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ADE80}
+  .rp-mail svg{width:22px;height:22px}
+  .rp-center{text-align:center}
+  .rp-center-actions{justify-content:center}
+  .rp-modal .btn:disabled{opacity:.6;pointer-events:none}
   .faq{margin-top:24px;display:grid;gap:12px}
   details{background:var(--surface);border:1px solid var(--edge);border-radius:18px;padding:18px 22px}
   summary{cursor:pointer;font-weight:800;font-size:15.5px;list-style:none;min-height:28px}
@@ -602,6 +624,7 @@
         <a href="#safety" data-i="ft3">Safety</a>
         <a href="https://github.com/itzraynx/nokiatis-muc-updates/releases" target="_blank" rel="noopener" data-i="ft4">Releases</a>
         <a href="https://github.com/itzraynx/nokiatis-muc-crash-reports/issues" target="_blank" rel="noopener" data-i="ft5">Crash reports</a>
+        <a href="#reset-password" id="rpFooterLink" data-i="ft8">Forgot your password?</a>
         <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank" rel="noopener" data-i="ft6">Open-source licenses</a>
         <a href="nokiatis-muc.html">About Nokiatis MUC</a>
       </span>
@@ -629,6 +652,78 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- account recovery (password reset). Activates by itself ONLY when a Supabase
+     email link — a password-reset or account confirmation — lands on this page
+     with #access_token / #error / #code in the URL. A normal visit never sees
+     any of this; the page stays exactly the official download page. -->
+<div class="pw-backdrop rp-backdrop" id="rpBackdrop" hidden>
+  <div class="pw-modal rp-modal" role="dialog" aria-modal="true" aria-labelledby="rpTitle">
+    <h3 id="rpTitle" data-i="rp0">Password reset</h3>
+    <p class="pw-sub" id="rpSub" data-i="rp1">Set a new password for your Nokiatis account.</p>
+    <p class="rp-tag" id="rpAccount" hidden></p>
+
+    <div class="rp-view" id="rpForm" hidden>
+      <label class="rp-lab" for="rpPass" data-i="rp3">New password</label>
+      <div class="rp-field">
+        <input type="password" id="rpPass" autocomplete="new-password" spellcheck="false" aria-describedby="rpHint">
+        <button class="rp-eye" id="rpEye" type="button" aria-label="Show password">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <label class="rp-lab" for="rpPass2" data-i="rp4">Repeat password</label>
+      <div class="rp-field">
+        <input type="password" id="rpPass2" autocomplete="new-password" spellcheck="false">
+      </div>
+      <p class="rp-note" id="rpHint" data-i="rp5">At least 6 characters. Use 8+ with letters and numbers for safety.</p>
+      <p class="pw-err" id="rpFormErr" hidden></p>
+      <div class="pw-actions">
+        <button class="btn ghost small" id="rpCancel1" type="button" data-i="rp6">Cancel</button>
+        <button class="btn small dl-btn" id="rpSave" type="button" data-i="rp7">Update password</button>
+      </div>
+    </div>
+
+    <div class="rp-view rp-center" id="rpDone" hidden>
+      <div class="rp-big" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <p class="rp-strong" data-i="rp8">Your password has been updated.</p>
+      <p class="rp-note" data-i="rp9">Open Nokiatis MUC and sign in with your new password — everything synced to your account stays in place.</p>
+      <div class="pw-actions rp-center-actions">
+        <button class="btn ghost small" id="rpDone2" type="button" data-i="rp10">Close</button>
+      </div>
+    </div>
+
+    <div class="rp-view" id="rpError" hidden>
+      <div class="rp-big warn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+      <p class="rp-strong" id="rpErrMsg">This link is no longer valid.</p>
+      <p class="rp-note" data-i="rp11">Your reset link may have expired or was already used. Send yourself a new one.</p>
+      <div class="pw-actions">
+        <button class="btn ghost small" id="rpCancel2" type="button" data-i="rp6">Cancel</button>
+        <button class="btn small dl-btn" id="rpRetry" type="button" data-i="rp12">Send a new link</button>
+      </div>
+    </div>
+
+    <div class="rp-view" id="rpRequest" hidden>
+      <label class="rp-lab" for="rpEmail" data-i="rp13">Your account email</label>
+      <input type="email" id="rpEmail" autocomplete="email" inputmode="email" spellcheck="false" placeholder="you@example.com">
+      <p class="pw-err" id="rpReqErr" hidden></p>
+      <p class="rp-note" data-i="rp14">We'll email you a reset link. Open it and set your new password right on this page — works for the app and the web.</p>
+      <div class="pw-actions">
+        <button class="btn ghost small" id="rpCancel3" type="button" data-i="rp6">Cancel</button>
+        <button class="btn small dl-btn" id="rpSend" type="button" data-i="rp15">Send reset link</button>
+      </div>
+    </div>
+
+    <div class="rp-view rp-center" id="rpSent" hidden>
+      <div class="rp-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg></div>
+      <p class="rp-strong rp-ltr" id="rpSentTo"></p>
+      <p class="rp-note" data-i="rp16">If that email has an account, the reset link is on its way (check spam too). Open it — it lands on this page, where you set your new password.</p>
+      <div class="pw-actions rp-center-actions">
+        <button class="btn ghost small" id="rpBack" type="button" data-i="rp17">Edit email</button>
+        <button class="btn ghost small" id="rpCloseSent" type="button" data-i="rp10">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 var T = {
@@ -709,7 +804,18 @@ ar:{
  st7:"جديدة اليوم",st8:"جلسات اليوم",st9:"على أحدث إصدار",st10:"آخر 24 ساعة (UTC)",
  p7:"البحث في الكتالوج والبث والأغلفة والكلمات، وفحص التحديثات الرسمية على GitHub. وإذا شغّلت سحابة Nokiatis Cloud: مزامنة المكتبة إلى حسابك وحدك. تقارير الأعطال تُكتب على الجهاز ولا تُشارك إلا إذا ضغطت «إرسال». ونبضة الإحصائيات المجهولة الاختيارية (الإعدادات ← مشاركة إحصائيات الاستخدام) ترسل فقط معرّفًا عشوائيًا لهذا التثبيت وإصدار التطبيق والمنصة والأوقات وعدّادات يومية مجهولة (تثبيتات ومرات تشغيل ومجموع نبضات كل ساعة) — لا مكتبتك ولا سجلّك ولا أي بيانات شخصية إطلاقًا — وهي التي تُغذّي عدّادات المستخدمين الحية في هذه الصفحة.",
  pw0:"منطقة المالك",pw1:"أدخل كلمة السر لفتح الإحصائيات الحية.",pw2:"كلمة السر غير صحيحة.",pw3:"إلغاء",pw4:"فتح",
- sb1:"أحدث إصدار",sb2:"⬇ ثبّت"
+ sb1:"أحدث إصدار",sb2:"⬇ ثبّت",
+ ft8:"نسيت كلمة المرور؟",
+ rp0:"إعادة تعيين كلمة المرور",rp1:"عيّن كلمة مرور جديدة لحسابك في Nokiatis.",
+ rp3:"كلمة المرور الجديدة",rp4:"أعد كتابة كلمة المرور",
+ rp5:"6 أحرف على الأقل — استخدم 8+ بأحرف وأرقام لأمانٍ أفضل.",
+ rp6:"إلغاء",rp7:"تحديث كلمة المرور",rp8:"تم تحديث كلمة المرور",
+ rp9:"افتح تطبيق Nokiatis MUC وسجّل الدخول بكلمة المرور الجديدة — كل ما زامنته بحسابك في مكانه.",
+ rp10:"إغلاق",
+ rp11:"ربما انتهت صلاحية الرابط أو استُخدم من قبل — أرسل لنفسك رابطاً جديداً.",
+ rp12:"أرسل رابطاً جديداً",rp13:"بريد حسابك الإلكتروني",
+ rp14:"سنرسل لك رابط استعادة بالبريد. افتحه لتعيّن كلمة مرور جديدة على هذه الصفحة مباشرة — يعمل للتطبيق وللويب.",
+ rp15:"إرسال رابط الاستعادة",rp16:"إن كان للبريد حساب، فالرابط في الطريق (تفقد مجلد غير المرغوبة أيضاً). افتح الرابط — سيفتح هذه الصفحة لتعيّن كلمة المرور الجديدة.",rp17:"تعديل البريد"
 }
 };
 var STR = {
@@ -1223,6 +1329,180 @@ function tryUnlock(){
   if(backdrop) backdrop.addEventListener('click', function(e){ if(e.target === backdrop) backdrop.hidden = true; });
 })();
 loadFeed(0);
+</script>
+<script>
+/* ---- account recovery (password reset) ----------------------------------
+   The app's "forgot password" already emails a reset link that lands on this
+   page (the project's Site URL) carrying a one-time session in the URL hash
+   (#access_token=…&refresh_token=…). Until now this page ignored it, so the
+   flow was a dead end. This module completes it: the visitor sets a new
+   password right here, on the official page — no app release needed, nothing
+   to install. It also offers "send me a new reset link" for expired ones.
+   Uses ONLY the public publishable key, exactly like the app itself. */
+(function(){
+'use strict';
+var SB_URL='https://ttpvquphlurjxwdpsmxo.supabase.co';
+var SB_KEY='sb_publishable_ryQFjl_Y_g44LDqSJQD6SA_5-HFujVs';
+function $(id){return document.getElementById(id)}
+var RP={
+ ar:{
+  tForm:'تعيين كلمة المرور',sForm:'عيّن كلمة المرور الجديدة لحسابك:',
+  tDone:'تم بنجاح',sDone:'يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.',
+  tErr:'الرابط غير صالح',tReq:'استعادة كلمة المرور',sReq:'أدخل بريد حسابك وسنرسل لك رابط استعادة.',
+  tSent:'تحقق من بريدك',sSent:'أرسلنا رابط الاستعادة إلى بريدك.',
+  eMismatch:'كلمتا المرور غير متطابقتين.',eShort:'كلمة المرور يجب أن تكون 6 أحرف على الأقل.',
+  eSame:'كلمة المرور الجديدة يجب أن تختلف عن القديمة.',
+  eExpired:'انتهت صلاحية هذا الرابط أو استُخدم من قبل — أرسل رابطاً جديداً.',
+  eOffline:'تعذر الاتصال — تحقق من الشبكة وأعد المحاولة.',
+  eRate:'محاولات كثيرة جداً — انتظر قليلاً ثم أعد المحاولة.',
+  eEmail:'أدخل بريداً إلكترونياً صحيحاً.',
+  eCode:'هذا الرابط يُكمل داخل التطبيق نفسه — أرسل رابطاً جديداً وسيعمل هنا مباشرة.',
+  eGeneric:'حدث خطأ غير متوقع — أعد المحاولة.',
+  saving:'جارٍ الحفظ…',sending:'جارٍ الإرسال…'
+ },
+ en:{
+  tForm:'Set your password',sForm:'Set the new password for your account:',
+  tDone:'Success',sDone:'You can sign in now with your new password.',
+  tErr:'This link is no longer valid',tReq:'Reset your password',sReq:"Enter your account email and we'll send you a reset link.",
+  tSent:'Check your email',sSent:'We sent a reset link to your inbox.',
+  eMismatch:"The two passwords don't match.",eShort:'Use at least 6 characters.',
+  eSame:'The new password must be different from the old one.',
+  eExpired:'This link expired or was already used — send a new one.',
+  eOffline:'Connection failed — check your network and try again.',
+  eRate:'Too many attempts — wait a moment and try again.',
+  eEmail:'Enter a valid email address.',
+  eCode:'This link completes inside the app — request a new link and it will work right here.',
+  eGeneric:'Something went wrong — try again.',
+  saving:'Saving…',sending:'Sending…'
+ }
+};
+function L(){return /ar/i.test(document.documentElement.lang)?RP.ar:RP.en}
+var bd=$('rpBackdrop');
+var V={form:$('rpForm'),done:$('rpDone'),error:$('rpError'),request:$('rpRequest'),sent:$('rpSent')};
+var TT=$('rpTitle'),SUB=$('rpSub'),ACC=$('rpAccount');
+var ctx={token:'',email:''};
+function head(t,s){TT.textContent=t;if(SUB)SUB.textContent=s}
+function view(n){for(var k in V){if(V[k])V[k].hidden=(k!==n)}if(bd.hidden){bd.hidden=false;document.body.style.overflow='hidden'}}
+function close(){bd.hidden=true;document.body.style.overflow='';ctx.token='';ctx.email='';stripHash()}
+function stripHash(){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){location.hash=''}}
+function jwtEmail(t){try{var p=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');while(p.length%4)p+='=';var j=JSON.parse(atob(p));return j.email||''}catch(e){return''}}
+function api(p,m,b,tok){
+  var h={'apikey':SB_KEY,'Content-Type':'application/json'};
+  if(tok)h.Authorization='Bearer '+tok;
+  return fetch(SB_URL+p,{method:m,headers:h,body:b?JSON.stringify(b):undefined});
+}
+function err(id,msg){var el=$(id);if(!el)return;if(msg){el.textContent=msg;el.hidden=false}else{el.hidden=true}}
+function busy(btn,on,label){if(!btn)return;if(on){btn.disabled=true;btn.setAttribute('data-t',btn.textContent);btn.textContent=label}else{btn.disabled=false;if(btn.getAttribute('data-t'))btn.textContent=btn.getAttribute('data-t')}}
+function mapErr(msg,status){
+  var x=L(),m=(msg||'').toLowerCase();
+  if(status===429)return x.eRate;
+  if(/different from the old/.test(m))return x.eSame;
+  if(/at least 6 characters/.test(m))return x.eShort;
+  if(/expired|invalid|already used|signature|unauthorized/.test(m))return x.eExpired;
+  return x.eGeneric;
+}
+function openToken(access){
+  ctx.token=access;ctx.email=jwtEmail(access);
+  stripHash(); /* the one-time session must not linger in the address bar */
+  head(L().tForm,L().sForm);
+  if(ACC){if(ctx.email){ACC.textContent=ctx.email;ACC.hidden=false}else{ACC.hidden=true}}
+  err('rpFormErr','');
+  view('form');
+  setTimeout(function(){var p=$('rpPass');if(p)p.focus()},90);
+}
+function openError(msg){
+  head(L().tErr,'');
+  var el=$('rpErrMsg');if(el)el.textContent=msg||L().eExpired;
+  view('error');
+}
+function openRequest(){
+  head(L().tReq,L().sReq);
+  err('rpReqErr','');
+  view('request');
+  setTimeout(function(){var e=$('rpEmail');if(e)e.focus()},90);
+}
+function openSent(email){
+  head(L().tSent,L().sSent);
+  var s=$('rpSentTo');if(s)s.textContent=email;
+  view('sent');
+}
+function save(){
+  var x=L(),a=$('rpPass').value,b=$('rpPass2').value;
+  err('rpFormErr','');
+  if(a.length<6){err('rpFormErr',x.eShort);return}
+  if(a!==b){err('rpFormErr',x.eMismatch);return}
+  var btn=$('rpSave');busy(btn,true,x.saving);
+  api('/auth/v1/user','PUT',{password:a},ctx.token).then(function(r){
+    if(r.ok){
+      api('/auth/v1/logout','POST',null,ctx.token).catch(function(){});
+      ctx.token='';ctx.email='';
+      head(L().tDone,L().sDone);
+      if(ACC)ACC.hidden=true;
+      view('done');
+    }else{
+      return r.json().then(function(j){
+        var msg=mapErr(j&&(j.msg||j.message),r.status);
+        if(msg===x.eExpired){openError(msg)}else{err('rpFormErr',msg)}
+      },function(){
+        var msg=mapErr('',r.status);
+        if(msg===x.eExpired){openError(msg)}else{err('rpFormErr',msg)}
+      });
+    }
+  }).catch(function(){err('rpFormErr',x.eOffline)}).then(function(){busy(btn,false)});
+}
+function send(){
+  var x=L(),e=($('rpEmail').value||'').trim().toLowerCase();
+  err('rpReqErr','');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){err('rpReqErr',x.eEmail);return}
+  var btn=$('rpSend');busy(btn,true,x.sending);
+  api('/auth/v1/recover','POST',{email:e}).then(function(r){
+    if(r.ok){openSent(e)}
+    else return r.json().then(function(j){
+      var m=(j&&(j.msg||j.message)||'');
+      err('rpReqErr',r.status===429?x.eRate:(r.status===422||/email/.test(m))?x.eEmail:x.eGeneric);
+    },function(){err('rpReqErr',x.eGeneric)});
+  }).catch(function(){err('rpReqErr',x.eOffline)}).then(function(){busy(btn,false)});
+}
+function parseHash(){
+  var h=location.hash||'';if(h.charAt(0)==='#')h=h.slice(1);
+  var o={};if(h.indexOf('=')<0)return o;
+  h.split('&').forEach(function(pair){
+    var i=pair.indexOf('=');if(i<0)return;
+    try{o[decodeURIComponent(pair.slice(0,i))]=decodeURIComponent(pair.slice(i+1).replace(/\+/g,'%20'))}catch(e){}
+  });
+  return o;
+}
+function handleHash(){
+  var p=parseHash();
+  if(p.access_token){openToken(p.access_token);return}
+  if(p.code){openError(L().eCode);return}
+  if(p.error||p.error_description||p.error_code){
+    openError(p.error_description||p.error||'');
+  }
+}
+function wire(){
+  $('rpSave').addEventListener('click',save);
+  $('rpSend').addEventListener('click',send);
+  $('rpEye').addEventListener('click',function(){
+    var i=$('rpPass'),show=(i.type==='password');
+    i.type=show?'text':'password';
+    this.setAttribute('aria-label',show?'Hide password':'Show password');
+    i.focus();
+  });
+  ['rpCancel1','rpCancel2','rpCancel3','rpDone2','rpCloseSent'].forEach(function(id){var b=$(id);if(b)b.addEventListener('click',close)});
+  var rt=$('rpRetry');if(rt)rt.addEventListener('click',openRequest);
+  var bk=$('rpBack');if(bk)bk.addEventListener('click',openRequest);
+  var fl=$('rpFooterLink');if(fl)fl.addEventListener('click',function(e){e.preventDefault();openRequest()});
+  $('rpPass').addEventListener('keydown',function(e){if(e.key==='Enter'){$('rpPass2').focus()}});
+  $('rpPass2').addEventListener('keydown',function(e){if(e.key==='Enter')save()});
+  $('rpEmail').addEventListener('keydown',function(e){if(e.key==='Enter')send()});
+  bd.addEventListener('click',function(e){if(e.target===bd)close()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!bd.hidden)close()});
+  handleHash();
+}
+window.addEventListener('hashchange',handleHash);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
+})();
 </script>
 </body>
 </html>
