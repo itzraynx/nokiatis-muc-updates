@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://itzraynx.github.io/nokiatis-muc-updates/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://itzraynx.github.io/nokiatis-muc-updates/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://itzraynx.github.io/nokiatis-muc-updates/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://itzraynx.github.io/nokiatis-muc-updates/"/>
+    <image:image><image:loc>https://itzraynx.github.io/nokiatis-muc-updates/images/icon.jpg</image:loc><image:title>Nokiatis MUC icon</image:title></image:image>
+    <image:image><image:loc>https://itzraynx.github.io/nokiatis-muc-updates/images/home.jpg</image:loc><image:title>Nokiatis MUC home screen</image:title></image:image>
+    <image:image><image:loc>https://itzraynx.github.io/nokiatis-muc-updates/images/lyrics.jpg</image:loc><image:title>Nokiatis MUC synced lyrics</image:title></image:image>
+    <image:image><image:loc>https://itzraynx.github.io/nokiatis-muc-updates/images/library.jpg</image:loc><image:title>Nokiatis MUC library</image:title></image:image>
+  </url>
+  <url>
+    <loc>https://itzraynx.github.io/nokiatis-muc-updates/nokiatis-muc.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://itzraynx.github.io/nokiatis-muc-updates/share.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

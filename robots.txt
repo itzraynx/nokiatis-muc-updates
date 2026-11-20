@@ -1,0 +1,10 @@
+# Nokiatis MUC — official download page (Team Nokiatis)
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# Machine-readable release feed used by the app and the page
+Allow: /update.json
+Allow: /beta.json
+
+Sitemap: https://itzraynx.github.io/nokiatis-muc-updates/sitemap.xml

@@ -1,0 +1,15 @@
+{
+  "name": "Nokiatis MUC — Official Download",
+  "short_name": "Nokiatis MUC",
+  "description": "Free Android music player by Team Nokiatis. Official signed APK download.",
+  "start_url": "/nokiatis-muc-updates/",
+  "scope": "/nokiatis-muc-updates/",
+  "display": "standalone",
+  "background_color": "#050707",
+  "theme_color": "#22C55E",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "images/icon.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any" }
+  ]
+}
