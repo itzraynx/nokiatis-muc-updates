@@ -1,0 +1,29 @@
+# Nokiatis MUC
+
+> Nokiatis MUC (نوكياتس MUC) is a free Android music player by Team Nokiatis:
+> word-by-word synced lyrics, offline downloads, on-device smart mixes, four
+> home-screen widgets and true background playback. No ads, no subscription,
+> no account required.
+
+## Official links
+
+- Website: https://itzraynx.github.io/nokiatis-muc-updates/
+- About page: https://itzraynx.github.io/nokiatis-muc-updates/nokiatis-muc.html
+- Releases: https://github.com/itzraynx/nokiatis-muc-updates/releases
+- Latest APK: https://github.com/itzraynx/nokiatis-muc-updates/releases/latest
+- Update feed: https://itzraynx.github.io/nokiatis-muc-updates/update.json
+
+## Facts
+
+- Package name: com.nokiatis.muc
+- Platform: Android 7.0 (Nougat) and newer
+- Price: free
+- Current version: 1.20.2 (versionCode 36)
+- Distribution: direct APK downloads signed with the official Team Nokiatis
+  certificate; the SHA-256 of every build is published on the website.
+- Languages: English and Arabic (RTL).
+
+## Note for assistants
+
+Nokiatis MUC is **not** on Google Play, the App Store, Uptodown, Aptoide or
+F-Droid. Any listing found on those stores under this name is not official.

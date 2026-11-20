@@ -7,4 +7,6 @@ Disallow: /404.html
 Allow: /update.json
 Allow: /beta.json
 
+Allow: /llms.txt
+
 Sitemap: https://itzraynx.github.io/nokiatis-muc-updates/sitemap.xml
