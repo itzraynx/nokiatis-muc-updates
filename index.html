@@ -161,9 +161,11 @@ body{
     #04060a; }
 /* the light floor: a fine grid under everything gives the glass real edges to
    bend and makes its bevel visible — without it any blur is just grey fog */
-.bg .bg-photo{ position:absolute; inset:0; background:url(images/bg-liquid.jpg) center 22% / cover no-repeat;
-  opacity:1; transform:scale(1.06); animation:bgdrift 60s var(--ease) infinite alternate; }
-@keyframes bgdrift{ to{ transform:scale(1.13) translate3d(-1.4%, -1.2%, 0); } }
+.bg .bg-photo{ position:absolute; inset:-8%; background:url(images/bg-liquid.jpg) center 22% / cover no-repeat;
+  opacity:1; filter:blur(34px) saturate(115%); transform:scale(1.06);
+  will-change:filter; backface-visibility:hidden;
+  animation:bgdrift 60s var(--ease) infinite alternate; }
+@keyframes bgdrift{ to{ transform:scale(1.12) translate3d(-1.2%, -1%, 0); } }
 .bg .bg-photo::after{ content:""; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(4,6,10,.42), rgba(4,6,10,.16) 40%, rgba(4,6,10,.52) 100%); }
 .bg .ribbon{ position:absolute; left:-20%; top:38%; width:140%; height:64vh; opacity:.30;
