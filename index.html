@@ -162,10 +162,10 @@ body{
 /* the light floor: a fine grid under everything gives the glass real edges to
    bend and makes its bevel visible — without it any blur is just grey fog */
 .bg .bg-photo{ position:absolute; inset:0; background:url(images/bg-liquid.jpg) center 22% / cover no-repeat;
-  opacity:.9; transform:scale(1.06); animation:bgdrift 60s var(--ease) infinite alternate; }
+  opacity:1; transform:scale(1.06); animation:bgdrift 60s var(--ease) infinite alternate; }
 @keyframes bgdrift{ to{ transform:scale(1.13) translate3d(-1.4%, -1.2%, 0); } }
 .bg .bg-photo::after{ content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(4,6,10,.55), rgba(4,6,10,.30) 40%, rgba(4,6,10,.62) 100%); }
+  background:linear-gradient(180deg, rgba(4,6,10,.42), rgba(4,6,10,.16) 40%, rgba(4,6,10,.52) 100%); }
 .bg .ribbon{ position:absolute; left:-20%; top:38%; width:140%; height:64vh; opacity:.30;
   background:conic-gradient(from 210deg at 50% 50%, rgba(34,197,94,.34), rgba(56,189,248,.22), rgba(167,139,250,.26), rgba(34,197,94,.34));
   filter:blur(58px); mask-image:radial-gradient(60% 50% at 50% 50%, #000, transparent 78%);
@@ -220,7 +220,7 @@ body{
   position:relative; isolation:isolate;
   background:
     linear-gradient(165deg, rgba(255,255,255,.075), rgba(255,255,255,.015) 38%, rgba(var(--glow),.028) 100%),
-    rgba(7,11,15,.36);
+    rgba(6,10,14,.20);
   border:1px solid rgba(255,255,255,.13);
   border-radius:var(--r-lg);
   box-shadow:
@@ -232,17 +232,23 @@ body{
     inset 0 -1px 0 rgba(255,255,255,.06);
   /* Browsers that can warp the backdrop get the lens; the rest keep the blur
      (an unparsable value is simply dropped and this declaration stands). */
-  -webkit-backdrop-filter:blur(var(--blur)) saturate(128%) brightness(.90) contrast(1.10);
-  backdrop-filter:blur(var(--blur)) saturate(128%) brightness(.90) contrast(1.10);
-  -webkit-backdrop-filter:blur(16px) url(#lens) saturate(128%) brightness(.90) contrast(1.10);
-  backdrop-filter:blur(16px) url(#lens) saturate(128%) brightness(.90) contrast(1.10);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(146%) brightness(1.00) contrast(1.06);
+  backdrop-filter:blur(var(--blur)) saturate(146%) brightness(1.00) contrast(1.06);
+  -webkit-backdrop-filter:blur(16px) url(#lens) saturate(146%) brightness(1.00) contrast(1.06);
+  backdrop-filter:blur(16px) url(#lens) saturate(146%) brightness(1.00) contrast(1.06);
   overflow:hidden;
   transition:border-color .45s var(--ease), transform .5s var(--ease-out), box-shadow .5s var(--ease);
 }
+/* the frost: a 3% noise grain inside the pane, so the surface is never a
+   perfectly flat CSS fill — at 1x it reads as texture, at 2x as material */
+.glass > .frost,
+.glass::part(frost){ display:none; }
+.glass{ --frost:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23f)' opacity='.11'/%3E%3C/svg%3E"); }
 /* the specular pass: thin streaks of a real highlight, not a milky wash */
 .glass::before{
   content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:2;
   background:
+    var(--frost),
     /* the two side edges where the pane is thickest: cold on one side, warm on the other */
     linear-gradient(90deg, rgba(120,240,255,.16), transparent 5%, transparent 95%, rgba(255,150,110,.13)),
     /* a caustic pool: light that came through the pane and landed on the floor */
@@ -250,6 +256,7 @@ body{
     radial-gradient(58% 24% at 22% -2%, rgba(255,255,255,.28), transparent 70%),
     linear-gradient(168deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.012) 22%, transparent 34%),
     linear-gradient(180deg, transparent 68%, rgba(255,255,255,.030) 100%);
+  background-blend-mode:soft-light, normal, normal, normal, normal, normal;
   opacity:.9;
 }
 /* the bevel + prism fringe */
