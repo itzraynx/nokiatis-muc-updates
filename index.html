@@ -263,7 +263,7 @@ a{ color:inherit; text-decoration:none; }
   .nav .cta{ padding:8px 12px; font-size:12px; }
   .nav .tools{ gap:5px; }
 }
-@media (max-width:430px){ #themeBtn{ display:none; } .nav .brand{ font-size:12.5px; } }
+@media (max-width:430px){ #themeBtn,#boostBtn{ display:none; } .nav .brand{ font-size:12.5px; } }
 @media (max-width:360px){ .nav .brand span{ display:none; } }
 
 /* ---------- hero ---------- */
@@ -561,6 +561,7 @@ body.is-android .stickybar{ display:block; }
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h14m0 0-5.5-5.5M18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4 11 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 14.5V18a2.5 2.5 0 0 1-2.5 2.5H6A2.5 2.5 0 0 1 3.5 18V8A2.5 2.5 0 0 1 6 5.5h3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m3.6 7 8.4 6 8.4-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.8 5 13.6h5.2l-.6 7.6L18 10.4h-5.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m11 11 8 8m-3.2.2-1.6-1.6m3.4-1.8-1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
   </defs>
 </svg>
@@ -588,6 +589,7 @@ body.is-android .stickybar{ display:block; }
       <a href="#faq" data-i="n6">FAQ</a>
     </div>
     <div class="tools">
+      <button class="iconbtn" id="boostBtn" aria-label="Performance mode" title="Performance mode"><svg class="svgico" viewBox="0 0 24 24" style="width:16px;height:16px"><use href="#i-bolt"/></svg></button>
       <button class="iconbtn" id="themeBtn" aria-label="Change accent colour" title="Change accent colour"><span class="dot"></span></button>
       <button class="iconbtn" id="langBtn" aria-label="Switch language">العربية</button>
       <a class="cta" id="navDownload" href="https://github.com/itzraynx/nokiatis-muc-updates/releases/latest" data-i="n7">Get the app</a>
@@ -986,6 +988,7 @@ body.is-android .stickybar{ display:block; }
     </div>
     <div class="cl glass">
       <h3 id="clTitle">Nokiatis MUC 1.20.2</h3>
+      <ul class="cl-list" id="clList" hidden></ul>
       <div class="body" id="clBody">Stability update: the update screen can never crash the app again. What happened: some 1.20.0 devices crashed on launch the moment the mandatory update screen appeared in 1.20.1 — a screen that had never actually run in production, sitting above the app's error boundary, so its crash killed the whole app and repeated on every launch. It was fixed at the root within minutes (the force flag was turned off so devices healed themselves through the normal optional update path with no action), and for devices stuck in a crash loop the only honest route was installing the update from the phone's browser over the app — Android keeps your library, playlists, downloads, statistics and settings exactly where they were. In 1.20.2 the update screen is wrapped in an error boundary that opens the app on any failure: the fault is caught, the saved lock is cleared, the screen disappears and the app stays fully usable — and the update still arrives through the bell, the notification and Settings as usual. Every update check runs fully guarded, the screen render is hardened end to end, and one real bug was fixed: the “do not force” decision left the old lock saved forever, so every launch was shortened to the lock screen even after the flag was turned off — it is now always cleared. The “What's new” list is built by a pure function that cannot crash whatever the data looks like (202 headless tests, all passing). The 1.20.1 volume line stays exactly as it is: it never drops on its own.</div>
     </div>
   </div>
@@ -1127,12 +1130,12 @@ ar:{
  f11t:"تحكّم من شاشة القفل", f13t:"ويدجت", f15t:"تصفّح أعمق", f17t:"وضع الليل", f19t:"بصمة الذوق",
  vf0:"فحص فوري", q1x:"أسئلة… وأجوبة",
 
- n1:"المميزات",n2:"لقطات الشاشة",n3:"تنزيل",n4:"الأمان",n5:"التثبيت",n6:"الأسئلة الشائعة",n7:"حمّل التطبيق",
+ n1:"المميزات",n2:"لقطات الشاشة",n3:"تنزيل",n4:"الأمان",n5:"التثبيت",n6:"الأسئلة الشائعة",n7:"⬇ حمّل التطبيق",
  h1:"مشغّل موسيقى مجاني لأندرويد",h2:"موسيقاك…",h3:"في زجاجٍ سائل.",
  h4:"Nokiatis MUC مشغّل موسيقى سريع وجميل من فريق Nokiatis — كلمات متزامنة كلمةً كلمة، تنزيلات تعمل بدون إنترنت، مزيج ذكي يُبنى على جهازك، ودجت للشاشة الرئيسية، وتشغيل حقيقي في الخلفية. كل شيء يعمل بدون حساب — والآن حساب «Nokiatis Cloud» المجاني اختياري بالكامل ويزامن مكتبتك بين كل أجهزتك… فقط اضغط تشغيل.",
- h5:"نزّل أحدث إصدار",h6:"هل هو آمن؟",h7:"الإصدار",h8:"الحجم",h9:"مجاني",h10:"بدون اشتراك",
+ h5:"⬇ نزّل أحدث إصدار",h6:"🛡️ هل هو آمن؟",h7:"الإصدار",h8:"الحجم",h9:"مجاني",h10:"بدون اشتراك",
  h11:"هذه هي صفحة التنزيل الرسمية الوحيدة لتطبيق Nokiatis MUC. كل نسخة هنا أصلية وموقّعة من فريق Nokiatis.",
- b1:"كلمات متزامنة",b2:"كلمةً كلمة ",b3:"خصوصية",b4:"لا حاجة لحساب",
+ b1:"كلمات متزامنة",b2:"كلمةً كلمة ♪",b3:"خصوصية",b4:"لا حاجة لحساب",
  f0:"لماذا Nokiatis؟",f1:"كل ما يجب أن يكون عليه تطبيق موسيقى",f2:"مصمّم حول فكرة واحدة: الموسيقى أولًا، والواجهة تذوب من حولها.",
  f3:"زجاج سائل — أو الكلاسيكي",f4:"شريط زجاجي عائم، مشغّل بغلاف كامل الشاشة، وأزرار نابضة تستجيب للمس. تفضّل الشكل الأصلي؟ زرٌّ واحد يعيد الواجهة الكلاسيكية.",
  f5:"كلمات تواكب الأغنية",f6:"كلمات متزامنة كلمةً كلمة من عدّة مصادر، تُطابق التسجيل الذي تسمعه تمامًا — مع تغيير المصدر وضبط التوقيت لكل أغنية.",
@@ -1151,8 +1154,8 @@ ar:{
  s11:"السجل وبصمة الذوق",s12:"التشغيلات والتخطيات وسلاسل الأيام وتقسيم ذوقك.",
  s13:"اجعله على ذوقك",s14:"ملف شخصي على الجهاز، زجاج سائل أو كلاسيكي، وتحكم عميق.",
  d0:"النسخة الرسمية",d1:"نزّل Nokiatis MUC",d2:"هذا الزر يعطيك دائمًا أحدث إصدار رسمي. التفاصيل بالأسفل تتحدّث تلقائيًا مع كل إصدار لكي تتحقق من ملفك بنفسك.",
- d3:"الحزمة:",d4:"يتطلب:",d5:"الحجم:",d6:"تاريخ الإصدار:",d7:"الموقّع:",d8:"تنزيل APK",d9:"كل الإصدارات والملاحظات",
- qr1:"أنت على حاسوب أو آيفون؟",qr2:"امسح هذا الرمز بهاتف أندرويد لفتح هذه الصفحة عليه ثم الثبّت بضغطة واحدة. أو انسخ الرابط وأرسله لهاتفك.",qr3:"انسخ رابط الصفحة",
+ d3:"الحزمة:",d4:"يتطلب:",d5:"الحجم:",d6:"تاريخ الإصدار:",d7:"الموقّع:",d8:"⬇ تنزيل APK",d9:"كل الإصدارات والملاحظات",
+ qr1:"أنت على حاسوب أو آيفون؟",qr2:"امسح هذا الرمز بهاتف أندرويد لفتح هذه الصفحة عليه ثم الثبّت بضغطة واحدة. أو انسخ الرابط وأرسله لهاتفك.",qr3:"🔗 انسخ رابط الصفحة",
  sf0:"الأمان",sf1:"هل Nokiatis MUC آمن؟ نعم — إنه الأصلي.",
  sf2:"Nokiatis MUC ليس فيروسًا ولا يحتوي أي برمجيات خبيثة. ولأنه يُثبَّت مباشرة من هذا الموقع بدل Google Play، يُظهر أندرويد تحذيرًا عامًا — وهذا معنى ذلك التحذير بالضبط وكيف تتحقق بنفسك.",
  sf3:"توقيع رسمي واحد",sf4:"كل نسخة رسمية موقّعة بنفس مفتاح فريق Nokiatis (بصمة الشهادة SHA-256 بالأسفل). وأندرويد نفسه يرفض تثبيت أي تحديث موقّع من غيرنا فوق تطبيقك.",
@@ -1160,8 +1163,8 @@ ar:{
  sf7:"عن تحذير أندرويد",sf8:"رسائل «تطبيقات غير معروفة» و«قد يكون هذا الملف ضارًا» تظهر مع كل تطبيق يُثبَّت خارج Google Play. معناها «Google Play لم يفحص هذا» وليس «تم العثور على فيروس». وPlay Protect يستطيع فحص التطبيق بعد التثبيت كأي تطبيق آخر.",
  sf9:"لا شيء نخفيه",sf10:"بدون مكتبات إعلانات أو تتبّع، وبدون أي حاجة لحساب. مكتبتك وسجلّك وبيانات ذوقك تبقى على جهازك — وحساب «Nokiatis Cloud» الاختياري يزامن صف مكتبتك وحدَه، إلى حسابك الخاص بك. التطبيق يتصل فقط بخدمات الموسيقى والكلمات وبقناة التحديثات الرسمية على GitHub، وبمزامنة السحابة إن شغّلتها.",
  sf11:"فحص مستقل على VirusTotal: الزر الأول يفتح صفحة تقرير هذه النسخة بالضبط عبر بصمتها SHA-256. وإذا كان VirusTotal لا يعرف هذه النسخة الجديدة بعد («Item not found»)، استخدم الزر الثاني لرفع ملف APK الذي نزّلته — سيُفحص بأكثر من 60 محرك مضاد فيروسات وسيصبح التقرير عامًا على نفس الرابط.",
- sf12:"هذه النسخة على VirusTotal ↗",sf13b:"ارفع وافحص بنفسك ↗",
- vf1:"فحص فوري: هل نسختك أصلية؟",vf2:"اختر ملف APK الذي نزّلته. تُحسب بصمته محليًا داخل متصفحك — الملف لا يغادر جهازك أبدًا — وتُقارن بالبصمة الرسمية SHA-256 بالأعلى.",
+ sf12:"🛡️ هذه النسخة على VirusTotal ↗",sf13b:"ارفع وافحص بنفسك ↗",
+ vf1:"✅ فحص فوري: هل نسختك أصلية؟",vf2:"اختر ملف APK الذي نزّلته. تُحسب بصمته محليًا داخل متصفحك — الملف لا يغادر جهازك أبدًا — وتُقارن بالبصمة الرسمية SHA-256 بالأعلى.",
  vf3:"اسحب ملف APK هنا، أو اضغط لاختيار الملف",
  sf13:"نزّل Nokiatis MUC فقط من هذه الصفحة أو من إصدارات GitHub الرسمية. النسخ المنتشرة في مواقع عشوائية أو إعلانات أو تطبيقات مراسلة ليست منا وقد تكون معدَّلة.",
  i0:"تثبيت في 60 ثانية",i1:"طريقة التثبيت",i2:"Nokiatis MUC يُثبَّت مباشرة خارج أي متجر — لذلك يطلب أندرويد إذنك مرة واحدة. هذا طبيعي مع كل تطبيق يُنزَّل مباشرة.",
@@ -1203,7 +1206,7 @@ ar:{
  st7:"جديدة اليوم",st8:"جلسات اليوم",st9:"على أحدث إصدار",st10:"آخر 24 ساعة (UTC)",
  p7:"البحث في الكتالوج والبث والأغلفة والكلمات، وفحص التحديثات الرسمية على GitHub. وإذا شغّلت سحابة Nokiatis Cloud: مزامنة المكتبة إلى حسابك وحدك. تقارير الأعطال تُكتب على الجهاز ولا تُشارك إلا إذا ضغطت «إرسال». ونبضة الإحصائيات المجهولة الاختيارية (الإعدادات ← مشاركة إحصائيات الاستخدام) ترسل فقط معرّفًا عشوائيًا لهذا التثبيت وإصدار التطبيق والمنصة والأوقات وعدّادات يومية مجهولة (تثبيتات ومرات تشغيل ومجموع نبضات كل ساعة) — لا مكتبتك ولا سجلّك ولا أي بيانات شخصية إطلاقًا — وهي التي تُغذّي عدّادات المستخدمين الحية في هذه الصفحة.",
  pw0:"منطقة المالك",pw1:"أدخل كلمة السر لفتح الإحصائيات الحية.",pw2:"كلمة السر غير صحيحة.",pw3:"إلغاء",pw4:"فتح",
- sb1:"أحدث إصدار",sb2:"ثبّت",
+ sb1:"أحدث إصدار",sb2:"⬇ ثبّت",
  ft8:"نسيت كلمة المرور؟",
  rp0:"إعادة تعيين كلمة المرور",rp1:"عيّن كلمة مرور جديدة لحسابك في Nokiatis.",
  rp3:"كلمة المرور الجديدة",rp4:"أعد كتابة كلمة المرور",
@@ -1219,33 +1222,33 @@ ar:{
 };
 var STR = {
  en:{
-  andOk:function(v){return "Android " + v + " — Nokiatis MUC works on your phone. Tap Download!";},
-  andUnknown:"You're on Android — tap Download to get the app.",
-  andOld:function(v){return "Nokiatis MUC needs Android 7.0 or newer. This device reports Android " + v + ".";},
-  ios:"You're on an Apple device. Nokiatis MUC is an Android app — open this page on an Android phone to install it.",
-  desk:"You're on a computer — scan the QR code with your Android phone (Download section), or download the APK here and transfer it.",
-  toast:"Downloading Nokiatis MUC… When it finishes, tap the downloaded file to install.",
-  copied:"Link copied — paste it on your Android phone.",
-  hashing:function(n){return "Checking “" + n + "”…";},
-  genuine:"GENUINE — this file matches the official Team Nokiatis build exactly (same size and SHA-256). Safe to install.",
-  genuineSize:"GENUINE — the SHA-256 matches the official Team Nokiatis build exactly. Safe to install.",
-  fake:"NOT GENUINE — this file does not match the official build. Delete it and download again from this page.",
-  tooOld:"This browser can't hash files here. open this page over HTTPS (or in Chrome) and try again.",
+  andOk:function(v){return "✅ You're on Android " + v + " — Nokiatis MUC works on your phone. Tap Download!";},
+  andUnknown:"✅ You're on Android — tap Download to get the app.",
+  andOld:function(v){return "⚠️ Nokiatis MUC needs Android 7.0 or newer. This device reports Android " + v + ".";},
+  ios:"🍎 You're on an Apple device. Nokiatis MUC is an Android app — open this page on an Android phone to install it.",
+  desk:"💻 You're on a computer — scan the QR code with your Android phone (Download section), or download the APK here and transfer it.",
+  toast:"⬇ Downloading Nokiatis MUC… When it finishes, tap the downloaded file to install.",
+  copied:"🔗 Link copied — paste it on your Android phone.",
+  hashing:function(n){return "⏳ Checking “" + n + "”…";},
+  genuine:"✅ GENUINE — this file matches the official Team Nokiatis build exactly (same size and SHA-256). Safe to install.",
+  genuineSize:"✅ GENUINE — the SHA-256 matches the official Team Nokiatis build exactly. Safe to install.",
+  fake:"❌ NOT GENUINE — this file does not match the official build. Delete it and download again from this page.",
+  tooOld:"⚠️ This browser can't hash files here. open this page over HTTPS (or in Chrome) and try again.",
   yourHash:"Your file's SHA-256"
  },
  ar:{
-  andOk:function(v){return "أندرويد " + v + " — Nokiatis MUC يعمل على هاتفك. اضغط تنزيل!";},
-  andUnknown:"أنت على أندرويد — اضغط تنزيل للحصول على التطبيق.",
-  andOld:function(v){return "Nokiatis MUC يحتاج أندرويد 7.0 أو أحدث. جهازك يُفيد بأندرويد " + v + ".";},
-  ios:"أنت على جهاز آبل. Nokiatis MUC تطبيق أندرويد — افتح هذه الصفحة على هاتف أندرويد لتثبيته.",
-  desk:"أنت على حاسوب — امسح رمز QR بهاتف أندرويد (في قسم التنزيل بالأسفل)، أو نزّل الملف هنا وانقله لهاتفك.",
-  toast:"جارٍ تنزيل Nokiatis MUC… عند الانتهاء اضغط على الملف المنزَّل لتثبيته.",
-  copied:"تم نسخ الرابط — الصقه على هاتف أندرويد.",
-  hashing:function(n){return "جارٍ فحص «" + n + "»…";},
-  genuine:"أصلية — هذا الملف يطابق النسخة الرسمية من فريق Nokiatis تمامًا (نفس الحجم وبصمة SHA-256). آمن للتثبيت.",
-  genuineSize:"أصلية — بصمة SHA-256 تطابق النسخة الرسمية من فريق Nokiatis تمامًا. آمن للتثبيت.",
-  fake:"غير أصلية — هذا الملف لا يطابق النسخة الرسمية. احذفه ونزّله من جديد من هذه الصفحة.",
-  tooOld:"هذا المتصفح لا يستطيع حساب البصمة هنا. افتح الصفحة عبر HTTPS (أو في Chrome) وحاول من جديد.",
+  andOk:function(v){return "✅ أنت على أندرويد " + v + " — Nokiatis MUC يعمل على هاتفك. اضغط تنزيل!";},
+  andUnknown:"✅ أنت على أندرويد — اضغط تنزيل للحصول على التطبيق.",
+  andOld:function(v){return "⚠️ Nokiatis MUC يحتاج أندرويد 7.0 أو أحدث. جهازك يُفيد بأندرويد " + v + ".";},
+  ios:"🍎 أنت على جهاز آبل. Nokiatis MUC تطبيق أندرويد — افتح هذه الصفحة على هاتف أندرويد لتثبيته.",
+  desk:"💻 أنت على حاسوب — امسح رمز QR بهاتف أندرويد (في قسم التنزيل بالأسفل)، أو نزّل الملف هنا وانقله لهاتفك.",
+  toast:"⬇ جارٍ تنزيل Nokiatis MUC… عند الانتهاء اضغط على الملف المنزَّل لتثبيته.",
+  copied:"🔗 تم نسخ الرابط — الصقه على هاتف أندرويد.",
+  hashing:function(n){return "⏳ جارٍ فحص «" + n + "»…";},
+  genuine:"✅ أصلية — هذا الملف يطابق النسخة الرسمية من فريق Nokiatis تمامًا (نفس الحجم وبصمة SHA-256). آمن للتثبيت.",
+  genuineSize:"✅ أصلية — بصمة SHA-256 تطابق النسخة الرسمية من فريق Nokiatis تمامًا. آمن للتثبيت.",
+  fake:"❌ غير أصلية — هذا الملف لا يطابق النسخة الرسمية. احذفه ونزّله من جديد من هذه الصفحة.",
+  tooOld:"⚠️ هذا المتصفح لا يستطيع حساب البصمة هنا. افتح الصفحة عبر HTTPS (أو في Chrome) وحاول من جديد.",
   yourHash:"بصمة ملفك SHA-256"
  }
 };
@@ -1301,6 +1304,7 @@ function applyLang(l){
     el.innerHTML = ar ? (T.ar[k] || EN[k]) : EN[k];
   });
   if(feedNotes && !ar){ setText('clBody', feedNotes); }
+  if(typeof renderChangelog === 'function') renderChangelog();
   renderCompat();
   if(window.renderStats) window.renderStats();
   try{ localStorage.setItem('nk-lang', l); }catch(e){}
@@ -1331,6 +1335,32 @@ document.getElementById('langBtn').addEventListener('click', function(){ applyLa
     document.documentElement.setAttribute('data-theme', next);
     if(meta) meta.setAttribute('content', colors[next] || '#05070a');
     try{ localStorage.setItem('nk-theme', next); }catch(e){}
+  });
+})();
+
+/* ---------- performance mode ----------
+   Glass is beautiful and expensive: blurring 56 surfaces costs GPU. On a cheap
+   Android phone, or on an old device with no backdrop-filter, one tap drops the
+   blur and keeps every function. Remembered across visits. */
+(function(){
+  var btn = document.getElementById('boostBtn');
+  var KEY = 'nk-simple';
+  function apply(on){
+    document.body.classList.toggle('simple-mode', !!on);
+    if(btn) btn.style.opacity = on ? '.55' : '';
+  }
+  var saved = false;
+  try{ saved = localStorage.getItem(KEY) === '1'; }catch(e){}
+  // auto-enable when the browser cannot blur at all: no half-broken glass
+  var canBlur = (window.CSS && CSS.supports && (CSS.supports('backdrop-filter','blur(2px)') || CSS.supports('-webkit-backdrop-filter','blur(2px)')));
+  if(!canBlur) saved = true;
+  apply(saved);
+  if(btn) btn.addEventListener('click', function(){
+    var on = !document.body.classList.contains('simple-mode');
+    apply(on);
+    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
+    toast(on ? (curLang === 'ar' ? 'وضع الأداء: الزجاج أخفّ' : 'Performance mode: lighter glass')
+             : (curLang === 'ar' ? 'وضع الزجاج الكامل' : 'Full glass mode'));
   });
 })();
 
@@ -1591,9 +1621,35 @@ function applyFeed(raw){
     feedNotes = notes.replace(/[#*_`]/g, '').replace(/\r/g, '');
     if(curLang !== 'ar') setText('clBody', feedNotes);
   }
+  /* The feed also carries structured changelog arrays (EN + AR). When they are
+     there, render them as a readable list instead of one long paragraph. */
+  feedChangelog = {
+    en: Array.isArray(raw.changelog) ? raw.changelog : null,
+    ar: Array.isArray(raw.changelogAr) ? raw.changelogAr : null
+  };
+  renderChangelog();
   syncSeo(version, size, url);
   document.documentElement.setAttribute('data-version', version);
   return true;
+}
+
+var STATIC_CHANGELOG = {"en": ["Root-caused the 1.20.1 crash on 1.20.0 phones: the mandatory update screen had never actually run in production before, sat above the app's error boundary, and its crash took the whole app down at open — then the remembered mandate re-rendered the same crashing screen at every launch.", "The official feed was de-escalated within minutes of understanding it: phones that still opened healed by themselves through the normal optional-update flow, with zero action required.", "The update screen is now wrapped in a crash boundary that fails OPEN: any future failure in that screen is caught, the remembered mandate is wiped, the lock disappears and the app stays fully usable — the update still arrives through the bell, the system notification and Settings. A lock screen can never again strand a phone.", "Every update check now runs fully guarded — offline, rate-limited or malformed feeds are the app's normal business, never a crash.", "The lock screen's render is defensive end to end: the synchronous native version call left the render path, every feed value is string-guarded, and junk values are tolerated instead of thrown on.", "Real bug fixed: a check that ended \"not mandatory\" used to leave the previously remembered mandate in storage forever, so a de-escalated feed still re-locked the app at every open until its own check finished — a non-mandatory result now always clears the remembered state.", "The \"what's new\" list is built by a pure, crash-proof function that handles every feed shape defensively — tested with malformed feeds, null manifests and round-tripped storage (202/202 device-free tests pass).", "The 1.20.1 volume-line rebuild rides along unchanged: the volume line never moves by itself, external changes are adopted instantly, with Mute/Max shortcuts, the scrub bubble and Arabic labels."], "ar": ["تشخيص جذر انهيار 1.20.1 على أجهزة 1.20.0: شاشة التحديث الإجباري لم تكن قد اشتغلت فعلياً في الإنتاج من قبل، وتقع فوق حاجز أخطاء التطبيق، فكان انهيارها يقتل التطبيق كله عند الفتح — ثم يستعيد القفل المحفوظ الشاشة نفسها المنهارة عند كل فتح.", "أُخفض الإجبار في الموقع الرسمي خلال دقائق من فهم المشكلة: الأجهزة التي كانت تفتح شُفيت بنفسها عبر مسار التحديث الاختياري المعتاد، بلا أي خطوة منك.", "شاشة التحديث الآن محصّنة بحاجز أخطاء يفتح التطبيق عند أي عطل مستقبلي: يُلتقط العطل، يُمسح القفل المحفوظ، تختفي الشاشة ويبقى التطبيق صالحاً للاستخدام تماماً — والتحديث يصل عبر الجرس والإشعار والإعدادات كالمعتاد. شاشة القفل لن تستطيع حبس هاتف بعد اليوم.", "كل فحص للتحديث يجري الآن محروساً بالكامل — انقطاع الشبكة أو بيانات معطوبة أو حد للطلبات: كله من الأعمال المعتادة للتطبيق، ولا يظهر كانهيار أبداً.", "عرض شاشة القفل صار محصّناً من الطرف إلى الطرف: استدعاء النسخة الأصلي المتزامن خرج من مسار العرض، وكل قيمة من الموقع تُقرأ بأمان، والقيم المعطوبة تُحتمل بدل أن ترمي استثناءً.", "عطل حقيقي أُصلح: قرار «لا إجبار» كان يترك القفل القديم محفوظاً إلى الأبد فيختصر فتح التطبيق شاشة القفل كل مرة رغم إلغاء الإجبار — الآن يُمسح القفل دائماً عند أي قرار غير إجباري.", "قائمة «ما الجديد» تُبنى بدالة نقية لا تنهار مهما كان شكل البيانات — مُختبرة ببيانات معطوبة وقيم فارغة ومخزن مستعاد (202 اختباراً بلا جهاز، كلها ناجحة).", "خط الصوت من 1.20.1 يبقى كما هو: لا ينزل تلقائياً أبداً، والتغييرات الخارجية تُعتمد فوراً، مع اختصاري الكتم وأقصى الصوت وفقاعة النسبة وتسميات عربية."]};
+var feedChangelog = STATIC_CHANGELOG;
+function renderChangelog(){
+  var list = document.getElementById('clList');
+  var body = document.getElementById('clBody');
+  if(!list || !body) return;
+  var fc = feedChangelog || STATIC_CHANGELOG || {};
+  var items = (curLang === 'ar' ? fc.ar : fc.en) || fc.en || fc.ar;
+  if(!items || !items.length){ list.hidden = true; body.style.display = ''; return; }
+  list.innerHTML = '';
+  items.forEach(function(txt){
+    var li = document.createElement('li');
+    li.textContent = txt;
+    list.appendChild(li);
+  });
+  list.hidden = false;
+  body.style.display = 'none';
 }
 
 function loadFeed(attempt){
